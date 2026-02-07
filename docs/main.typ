@@ -4,9 +4,9 @@
 #show: it => basic-report(
   doc-category: "Dokumentation",
   doc-title: "Honeypot Harbor",
-  author: "***REMOVED*** ***REMOVED***, ***REMOVED*** ***REMOVED***, ***REMOVED*** ***REMOVED***",
-  affiliation: "INF2023 - Verteilte Systeme",
-  logo: image("assets/***REMOVED***-logo.png", width: 5cm),
+  author: "Name Name Name",
+  affiliation: "Kurs - Verteilte Systeme",
+  //logo: image("assets/logo.png", width: 5cm),
   language: "de",
   compact-mode: false,
   it
@@ -46,14 +46,14 @@ Vor diesem Hintergrund wurde im Rahmen der Praxisarbeit der Vorlesung "Verteilte
 
 == Nicht Funktional
 
-*Sicherheit:* 
+*Sicherheit:*
 - Strikte Isolation der Honeypot-Systeme vom produktiven Netz.
 - Nur kontrollierter Datentransfer (Logs) über das Gateway.
 - Zugriff aup API nur als Autorisierte Person möglich.
 
 *Skalierbarkeit:*
 - Einfache Erweiterbarkeit durch Hinzufügen weiterer Honeypots.
-- Erweitrebarkeit des Front und Backends für Lastenverteilung 
+- Erweitrebarkeit des Front und Backends für Lastenverteilung
 
 *Ausfallsicherheit:*
 - Loadbalancer verhindert Single Point of Failure.
@@ -75,7 +75,7 @@ Für die Verarbeitung und Analyse der Honeypot-Logs wurden Teile des ELK-Stacks 
 
 Das Frontend wurde mit *Vue.js* umgesetzt, da dieses Framework im Vergleich zu Angular und React besonders einsteigerfreundlich und übersichtlich strukturiert ist. Vue.js ermöglicht eine schnelle Umsetzung von Komponenten bei gleichzeitig geringem Einarbeitungsaufwand, was die Entwicklung effizient gestaltet @DYMORA2023. Zudem wurden durch positive Erfahrungsberichte aus dem Bekanntenkreis Neugier und Interesse geweckt, während Angular und ähnliche Frameworks aufgrund ihrer Komplexität zunächst eher abschreckend wirkten.
 
-Das Backend wurde mit *Spring Boot* umgesetzt, da es in Enterprise Umgebungen weit verbreitet ist und damit die Möglichkeit bietet, praktische Erfahrungen zu sammeln sowie Kenntnisse in Java zu vertiefen. Durch das Maven-Plugin-System lässt sich Spring Boot problemlos mit Elasticsearch integrieren, sodass Logs aus dem Honeypot-System effizient verarbeitet und analysiert werden können. Darüber hinaus bietet Spring Boot umfangreiche Sicherheitsfunktionen, durch Spring Security, die eine einfache Umsetzung von Authentifizierung, Autorisierung und Rollenmanagement ermöglichen. 
+Das Backend wurde mit *Spring Boot* umgesetzt, da es in Enterprise Umgebungen weit verbreitet ist und damit die Möglichkeit bietet, praktische Erfahrungen zu sammeln sowie Kenntnisse in Java zu vertiefen. Durch das Maven-Plugin-System lässt sich Spring Boot problemlos mit Elasticsearch integrieren, sodass Logs aus dem Honeypot-System effizient verarbeitet und analysiert werden können. Darüber hinaus bietet Spring Boot umfangreiche Sicherheitsfunktionen, durch Spring Security, die eine einfache Umsetzung von Authentifizierung, Autorisierung und Rollenmanagement ermöglichen.
 
 *PostgreSQL* wurde als Datenbank gewählt, da bereits in früheren Projekten praktische Erfahrungen mit diesem System gesammelt wurden. Es dient als zentrale Komponente für das User-Management sowie das Handling von Tokens und ermöglicht eine zuverlässige, relationale Speicherung und Verwaltung der entsprechenden Daten.
 
@@ -83,8 +83,8 @@ Als Reverse Proxy und Loadbalancer wurde *NGINX* eingesetzt, da es sich durch ei
 
 == Systemkomponenten
 === Cowrie
-Cowrie als Honeypot bietet einige Konfigurationsmöglichkeiten. Standardmäßig würde Cowrie eine Standardkonfiguration (cowrie.cfg), sowie eine Standarddatei für zugelassene Anmeldeinformationen (userdb.txt) verwenden. In der cowrie.cfg können unter anderem Hostname, Betriebssystemname, SSH-Version, IP-Adresse, Ports und andere Variablen definiert werden @cabral2021advanced. Mithilfe von mounts im docker-compose.yml können diese Dateien überschrieben werden. Beim Hochfahren einer Cowrie-Instanz werden die konfigurierten Dateien gelesen und es können ssh-Verbindungen zum Honeypot hergestellt werden. Durch den Befehl ssh -p 2222 \<username\>\@\<IPvonHoneypot\> kann sich mit einem der Honeypots verbunden werden. 
-Unmittelbar nach Eingabe des Befehl wird eine Eingabe von Benutzername und Passwort gefordert. Welche Benutzernamen und Passwörter zugelassen sind, wird in der userdb.txt festgehalten. Im Honeypot können dann Befehle, wie z.B. whoami ausgeführt werden. 
+Cowrie als Honeypot bietet einige Konfigurationsmöglichkeiten. Standardmäßig würde Cowrie eine Standardkonfiguration (cowrie.cfg), sowie eine Standarddatei für zugelassene Anmeldeinformationen (userdb.txt) verwenden. In der cowrie.cfg können unter anderem Hostname, Betriebssystemname, SSH-Version, IP-Adresse, Ports und andere Variablen definiert werden @cabral2021advanced. Mithilfe von mounts im docker-compose.yml können diese Dateien überschrieben werden. Beim Hochfahren einer Cowrie-Instanz werden die konfigurierten Dateien gelesen und es können ssh-Verbindungen zum Honeypot hergestellt werden. Durch den Befehl ssh -p 2222 \<username\>\@\<IPvonHoneypot\> kann sich mit einem der Honeypots verbunden werden.
+Unmittelbar nach Eingabe des Befehl wird eine Eingabe von Benutzername und Passwort gefordert. Welche Benutzernamen und Passwörter zugelassen sind, wird in der userdb.txt festgehalten. Im Honeypot können dann Befehle, wie z.B. whoami ausgeführt werden.
 
 Während dem Prozess des Anmeldens oder des Verbindungsversuches des Angreifers werden selbst nur die Verbindungsversuche schon geloggt. Alles was danach passiert, wird ebenfalls geloggt und in einer JSON-Datei (cowrie.json) gespeichert. Die Ausgabe als JSON-Datei anstelle von tty-Logs muss vorher explizit in der cowrie.cfg erlaubt werden.
 
@@ -124,7 +124,7 @@ Die Gewährleistung der Sicherheit und die Verhinderung unautorisierter Datenexf
 
 Zunächst wurde ein API-Filter implementiert, der prüft, dass nur Requests mit einem gültigen "X-API-KEY" im Header weitergeleitet werden. Dadurch können ausschließlich autorisierte Clients, die über diesen Schlüssel verfügen, Anfragen an das Backend stellen.
 
-Drauf aufbauend wurde ein weiterer Filter realisiert, der sicherstellt, dass nur Requests mit einem gültigen JWT (JSON Web Token) akzeptiert werden. Auf diese Weise werden alle Endpunkte, die nicht direkt für Login- oder Registrierungsvorgänge zuständig sind, effektiv geschützt. Der JWT-Prozess wird in @spring-jwt abgebildet, welche die Architektur und Funktionsweise veranschaulicht. 
+Drauf aufbauend wurde ein weiterer Filter realisiert, der sicherstellt, dass nur Requests mit einem gültigen JWT (JSON Web Token) akzeptiert werden. Auf diese Weise werden alle Endpunkte, die nicht direkt für Login- oder Registrierungsvorgänge zuständig sind, effektiv geschützt. Der JWT-Prozess wird in @spring-jwt abgebildet, welche die Architektur und Funktionsweise veranschaulicht.
 
 #figure(
   image("assets/spring-security.png", width: 100%),
@@ -183,19 +183,19 @@ Diese Einschränkung erschwerte die Integration der Honeypot Umgebung erheblich.
 Die Lösung bestand darin, ein sogenanntes "Shim" Netzwerk zu konfigurieren, um die Kommunikation zwischen Host und Macvlan Containern zu ermöglichen. Dabei wurden die Macvlan Netzwerke so erweitert, dass der Host explizit eine eigene Adresse innerhalb des jeweiligen Subnetzes erhielt. In Docker wurde dies über die Option --aux-address umgesetzt:
 
 ```sh
-# Shim net für internal-net (Frontend/Backend) 
+# Shim net für internal-net (Frontend/Backend)
 docker network create -d macvlan \
   --subnet=192.168.1.0/25 \
   --gateway=192.168.1.1 \
   --aux-address 'host=192.168.1.126' \
   -o parent=veth0 \
-  honeypotharbor-internal-network 
+  honeypotharbor-internal-network
 ```
 Die --aux-address reserviert dabei eine feste IP-Adresse für den Host im Macvlan Subnetz, sodass er wie ein regulärer Netzwerkteilnehmer behandelt wird. Zusätzlich wurde auf dem Host eine direkte Macvlan Schnittstelle eingerichtet, um sicherzustellen, dass Pakete korrekt geroutet werden:
 ```sh
 echo "Create internal Macvlan shim for Host-access."
 sudo ip link add internal-net link veth0 type macvlan mode bridge
-sudo ip addr add 192.168.1.126/25 dev internal-net 
+sudo ip addr add 192.168.1.126/25 dev internal-net
 sudo ip link set internal-net up
 sudo ip route add 192.168.1.0/25 dev internal-net
 ```
@@ -249,7 +249,7 @@ Durch das Debugging von Requests und Responses mit unteranderem Burp Suite konnt
 
 == Herausforderungen
 
-Die Einrichtung des macvlan-Netzwerks stellte zu Beginn eine wesentliche Hürde dar. Da einschlägige Dokumentationen und praxisnahe Beispiele nur eingeschränkt verfügbar waren, gestaltete sich die Konfiguration zeitaufwendig und erforderte zahlreiche Iterationen. 
+Die Einrichtung des macvlan-Netzwerks stellte zu Beginn eine wesentliche Hürde dar. Da einschlägige Dokumentationen und praxisnahe Beispiele nur eingeschränkt verfügbar waren, gestaltete sich die Konfiguration zeitaufwendig und erforderte zahlreiche Iterationen.
 
 Darüber hinaus wurde die Systemausführung auf lokalen Entwicklungsrechnern als limitierender Faktor identifiziert. Die Vielzahl parallel laufender Container führte zu hoher Ressourcenauslastung, langen Startzeiten und eingeschränkter Testbarkeit. Eine optimierte Testumgebung, konnte im Projektzeitraum nicht umgesetzt werden, sollte jedoch in zukünftigen Arbeiten berücksichtigt werden, da gerade gegen Ende Elastic Search durch die hohe RAM Nutzung einige Probleme bereitete (ERROR: Elasticsearch died while starting up, with exit code 137).
 
